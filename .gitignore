@@ -22,7 +22,9 @@ SW4STM32/
 # Keil MDK-ARM：保留工程文件，忽略输出文件
 MDK-ARM/Listings/
 MDK-ARM/Objects/
+MDK-ARM/RTE/Device/
 MDK-ARM/*.uvguix.*
+MDK-ARM/DebugConfig/*.dbgconf
 MDK-ARM/*.dbgconf
 MDK-ARM/*.lnp
 MDK-ARM/*.iex
