@@ -227,7 +227,6 @@ void StartTask03(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  /* USER CODE BEGIN Callback01 */
 	// 从发送队列中接收数据
 	AngleData_t SendData;
 	if (osMessageQueueGet(sendDataQueueHandle, &SendData, NULL, osWaitForever) == osOK) {
