@@ -31,6 +31,8 @@ MDK-ARM/*.iex
 MDK-ARM/*.htm
 MDK-ARM/*.sct
 MDK-ARM/*.build_log.htm
+MDK-ARM/.vscode/
+MDK-ARM/DebugConfig/
 
 # =============================================
 # 构建输出文件
@@ -71,3 +73,7 @@ Thumbs.db
 *.local
 *.user
 EOF
+
+# 忽略 FreeRTOS 说明文档（可选，非必须源码）
+Middlewares/Third_Party/FreeRTOS/Source/*.txt
+
