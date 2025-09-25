@@ -84,6 +84,11 @@ osTimerId_t htim_gimbal_ctrlHandle;
 const osTimerAttr_t htim_gimbal_ctrl_attributes = {
   .name = "htim_gimbal_ctrl"
 };
+/* Definitions for sendSemHandle */
+osSemaphoreId_t sendSemHandleHandle;
+const osSemaphoreAttr_t sendSemHandle_attributes = {
+  .name = "sendSemHandle"
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -111,6 +116,10 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
+
+  /* Create the semaphores(s) */
+  /* creation of sendSemHandle */
+  sendSemHandleHandle = osSemaphoreNew(1, 1, &sendSemHandle_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -227,27 +236,30 @@ void StartTask03(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	// 从发送队列中接收数据
-	AngleData_t SendData;
-	if (osMessageQueueGet(sendDataQueueHandle, &SendData, NULL, osWaitForever) == osOK) {
-		// 发送数据处理，例如通过UART发送
-		uint16_t speed = 5000;
-		if(SendData.yaw == 0){
-			uint8_t stop[5] = {0x01, 0xFE, 0x98, 0x00, 0x6B};
-			HAL_UART_Transmit_DMA(&huart2, stop, 5);
-		}
-		else if(SendData.yaw > 0){//正转
+    // 等待信号量，确保定时器周期到达后再发送数据
+    if(osSemaphoreAcquire(sendSemHandleHandle, osWaitForever) == osOK){
+        // 从发送队列中接收数据
+	    AngleData_t SendData;
+	    if (osMessageQueueGet(sendDataQueueHandle, &SendData, NULL, osWaitForever) == osOK) {
+		    // 发送数据处理，例如通过UART发送
+		    uint16_t speed = 5000;
+		    if(SendData.yaw == 0){
+			    uint8_t stop[5] = {0x01, 0xFE, 0x98, 0x00, 0x6B};
+			    HAL_UART_Transmit_DMA(&huart2, stop, 5);
+		    }
+		    else if(SendData.yaw > 0){//正转
 				uint32_t outyaw = (uint32_t)(142.0f * SendData.yaw * 6.0f);
 				send_motor_cmd(0x00, speed, 0xDD, outyaw, 0x00, 0x00);
-		}
-		else if(SendData.yaw < 0){//反转
+		    }
+		    else if(SendData.yaw < 0){//反转
 				SendData.yaw = -SendData.yaw;
 				uint32_t outyaw = (uint32_t)(142.0f * SendData.yaw * 6.0f);
 				send_motor_cmd(0x01, speed, 0xDD, outyaw, 0x00, 0x00);
-		}
-		printf("Yaw: %.2f, Pitch: %.2f\r\n", SendData.yaw, SendData.pitch);
-	}
-    osDelay(20);
+	        }
+		    printf("Yaw: %.2f, Pitch: %.2f\r\n", SendData.yaw, SendData.pitch);
+	    }
+    }
+    osDelay(1);
   }
   /* USER CODE END StartTask03 */
 }
@@ -256,7 +268,8 @@ void StartTask03(void *argument)
 void Callback01(void *argument)
 {
   /* USER CODE BEGIN Callback01 */
-
+    //释放sendSemHandleHandle信号量
+    osSemaphoreRelease(sendSemHandleHandle);
   /* USER CODE END Callback01 */
 }
 
