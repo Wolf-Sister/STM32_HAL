@@ -113,8 +113,8 @@ int main(void)
 	// 创建接收数据队列
 	receiveDataQueue = xQueueCreate(5, sizeof(SensorData_t));
 	// PID参数初始化
-	PID_Init(&pid_yaw, 0.3f, 0.0f, 0.1f);
-    PID_Init(&pid_pitch, 0.3f, 0.0f, 0.1f);
+	PID_Init(&pid_yaw, 0.1f, 0.0f, 0.5f);
+    PID_Init(&pid_pitch, 0.1f, 0.0f, 0.5f);
   /* USER CODE END 2 */
 
   /* Init scheduler */

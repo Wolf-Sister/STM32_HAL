@@ -41,12 +41,6 @@ typedef struct {
     int16_t x;  // x轴差值
 	int16_t y;  // y轴差值
 } SensorData_t;
-
-// 向另一个任务发送角度数据
-typedef struct {
-    float yaw;   // 偏航角度
-    float pitch; // 俯仰角度
-} AngleData_t;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
