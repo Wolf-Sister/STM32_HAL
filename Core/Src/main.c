@@ -50,8 +50,6 @@
 /* USER CODE BEGIN PV */
 uint8_t receiveData[7]; // 接收数据缓存
 QueueHandle_t receiveDataQueue = NULL;// 接收数据队列
-QueueHandle_t sendDataQueue = NULL;// 发送数据队列
-QueueHandle_t gimbalClickQueue = NULL;// 云台点击回传数据队列
 PID_Controller pid_pitch;// PID控制器俯仰
 PID_Controller pid_yaw;// PID控制器偏航
 uint8_t uartTxReady = 0; // 串口发送完成标志
