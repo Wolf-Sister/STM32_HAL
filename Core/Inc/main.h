@@ -58,7 +58,6 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 extern QueueHandle_t receiveDataQueue;
-extern QueueHandle_t gimbalClickQueue;
 extern uint8_t uartTxReady;
 /* USER CODE END EFP */
 

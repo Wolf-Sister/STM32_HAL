@@ -113,8 +113,6 @@ int main(void)
 	HAL_UART_Receive_DMA(&huart2, receiveData, 4);
 	// 创建接收数据队列
 	receiveDataQueue = xQueueCreate(5, sizeof(SensorData_t));
-	// 创建云台点击回传数据队列
-	gimbalClickQueue = xQueueCreate(5, sizeof(GimbalClickData_t));
 
 	// PID参数初始化
 	PID_Init(&pid_yaw, 0.1f, 0.0f, 0.5f);
