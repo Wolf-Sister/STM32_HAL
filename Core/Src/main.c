@@ -51,6 +51,7 @@
 uint8_t receiveData[7]; // 接收数据缓存
 QueueHandle_t receiveDataQueue = NULL;// 接收数据队列
 QueueHandle_t sendDataQueue = NULL;// 发送数据队列
+QueueHandle_t gimbalClickQueue = NULL;// 云台点击回传数据队列
 PID_Controller pid_pitch;// PID控制器俯仰
 PID_Controller pid_yaw;// PID控制器偏航
 uint8_t uartTxReady = 0; // 串口发送完成标志
@@ -110,8 +111,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	// 启动定时器4串口接收（接收字节长度7的数据）
 	HAL_UART_Receive_DMA(&huart4, receiveData, 7);
+	// 启动定时器2串口接收（接收字节长度4的数据）
+	HAL_UART_Receive_DMA(&huart2, receiveData, 4);
 	// 创建接收数据队列
 	receiveDataQueue = xQueueCreate(5, sizeof(SensorData_t));
+	// 创建云台点击回传数据队列
+	gimbalClickQueue = xQueueCreate(5, sizeof(GimbalClickData_t));
+
 	// PID参数初始化
 	PID_Init(&pid_yaw, 0.1f, 0.0f, 0.5f);
     PID_Init(&pid_pitch, 0.1f, 0.0f, 0.5f);

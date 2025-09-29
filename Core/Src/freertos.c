@@ -50,6 +50,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 extern QueueHandle_t receiveDataQueue;
+// 云台点击回传数据队列
+extern QueueHandle_t gimbalClickQueue;
 // PID控制器实例
 extern PID_Controller pid_pitch;
 extern PID_Controller pid_yaw;
@@ -182,10 +184,10 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the queue(s) */
   /* creation of sendyawDataQueue */
-  sendyawDataQueueHandle = osMessageQueueNew (3, sizeof(float), &sendyawDataQueue_attributes);
+  sendyawDataQueueHandle = osMessageQueueNew (6, sizeof(float), &sendyawDataQueue_attributes);
 
   /* creation of sendpitchDataQueue */
-  sendpitchDataQueueHandle = osMessageQueueNew (3, sizeof(float), &sendpitchDataQueue_attributes);
+  sendpitchDataQueueHandle = osMessageQueueNew (6, sizeof(float), &sendpitchDataQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
